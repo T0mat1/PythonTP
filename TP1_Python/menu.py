@@ -51,7 +51,7 @@ def empty_file():
         print("ERROR : Aucun fichier n'a été choisi.")
     else:
         print("Suppression du contenu du fichier")
-        open('file.txt', 'w').close()
+        open(file_name, 'w').close()
         print("Done.")
     print()  # print an empty line as a separation
 
