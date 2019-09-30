@@ -2,7 +2,8 @@
 # TP1 Python - Thomas ROSSI
 from builtins import str
 
-from date import Date
+from TP1_Python.date import Date
+from datetime import date as d
 
 
 class Etudiant:
@@ -15,4 +16,23 @@ class Etudiant:
     def adresselec(self):
         return self.prenom+"."+self.nom+"@etu.univ-tours.fr"
 
+    def age(self):
+        today = d.today()
+        age = today.year - self.date_naissance.annee
+        if today.month < self.date_naissance.mois or (today.month == self.date_naissance.mois and today.day < self.date_naissance.jour):
+            age -= 1
+        return age
 
+    def __str__(self):
+        return self.prenom+" "+self.nom
+
+    def __repr__(self):
+        return self.__str__()
+
+
+if __name__ == "__main__":
+    students = []
+    for line in open(".\\fichetu.csv","r").readlines():
+        data = line.split(";")
+        students.append(Etudiant(data[0], data[1], data[2]))
+    print(str(students))
