@@ -12,6 +12,8 @@ class Calculatrice:
         KEYS_HEIGHT = 1
         WHITE = "#FFFFFF"
         BLACK = "#000000"
+        # ============== Attributes ==============
+        self.isFloat = False
         # ============== Set the window ==============
         self.window = Tk()
         self.window.title("Calculatrice")
@@ -57,13 +59,18 @@ class Calculatrice:
             self.display_label["text"] = str(self.display_label["text"]) + text
 
     def compute(self):
-        self.display_label["text"] = str(eval(self.display_label["text"]))
+        res = eval(self.display_label["text"])
+        self.isFloat = "." in str(res)
+        self.display_label["text"] = str(res)
 
     def erase_all(self):
+        self.isFloat = False
         self.display_label.config(text="0")
 
     def erase_last(self):
         if len(self.display_label['text']) > 1:
+            if self.display_label["text"][-1] == ".":
+                self.isFloat = False
             self.display_label.config(text=self.display_label['text'][:-1])
         else:
             self.erase_all()
@@ -71,9 +78,12 @@ class Calculatrice:
     def add_symbol(self, symbol):
         if self.display_label["text"][-1].isdigit():
             self.update_display(symbol)
+            self.isFloat = False
 
     def add_dot(self):
-        return
+        if not self.isFloat:
+            self.update_display(".")
+            self.isFloat = True
 
 
 if __name__ == "__main__":
