@@ -34,7 +34,10 @@ class Etudiant:
 
 if __name__ == "__main__":
     students = []
+    # Read the file instantiate the objects and store them in a list
     for line in open(".\\fichetu.csv","r").readlines():
         data = line.split(";")
         students.append(Etudiant(data[0], data[1], data[2]))
-    print(str(students))
+    # Print each student
+    for student in students:
+        print(str(student))
