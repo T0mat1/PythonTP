@@ -29,18 +29,24 @@ class Calculatrice:
         for r in range(5):
             self.rows.append(Frame(self.window, bd=0))
             self.rows[r].pack()
-            if r < 3:
-                for c in range(3):
-                    Button(self.rows[r], width=str(4), height=str(KEYS_HEIGHT), text=str(7-3*r+c), borderwidth=1, font=self.font).grid(row=0, column=c)
-        Button(self.rows[0], width=str(4), height=str(KEYS_HEIGHT), text="%", font=self.font, borderwidth=1).grid(row=0, column=3)
-        Button(self.rows[1], width=str(4), height=str(KEYS_HEIGHT), text="x", font=self.font, borderwidth=1).grid(row=0, column=3)
-        Button(self.rows[2], width=str(4), height=str(KEYS_HEIGHT), text="-", font=self.font, borderwidth=1).grid(row=0, column=3)
-        Button(self.rows[3], width=str(13), height=str(KEYS_HEIGHT), text="0", font=self.font, borderwidth=1).grid(row=0, column=0)
-        Button(self.rows[3], width=str(4), height=str(KEYS_HEIGHT), text="+", font=self.font, borderwidth=1).grid(row=0, column=1)
-        Button(self.rows[4], width=str(5), height=str(KEYS_HEIGHT), text="C", command=self.erase_all(), font=self.font, borderwidth=1).grid(row=0, column=0)
-        Button(self.rows[4], width=str(5), height=str(KEYS_HEIGHT), text="AC", command=self.erase_last(), font=self.font, borderwidth=1).grid(row=0, column=1)
-        Label(self.rows[4], width=str(5), height=str(KEYS_HEIGHT), text="").grid(row=0, column=2)
-        Button(self.rows[4], width=str(4), height=str(KEYS_HEIGHT), text="=", font=self.font, borderwidth=1).grid(row=0, column=3)
+        Button(self.rows[0], width=str(4), height=str(KEYS_HEIGHT), text="7", command=lambda: self.update_display(str(7)), font=self.font, borderwidth=1).grid(row=0, column=0)
+        Button(self.rows[0], width=str(4), height=str(KEYS_HEIGHT), text="8", command=lambda: self.update_display(str(8)), font=self.font, borderwidth=1).grid(row=0, column=1)
+        Button(self.rows[0], width=str(4), height=str(KEYS_HEIGHT), text="9", command=lambda: self.update_display(str(9)), font=self.font, borderwidth=1).grid(row=0, column=2)
+        Button(self.rows[1], width=str(4), height=str(KEYS_HEIGHT), text="4", command=lambda: self.update_display(str(4)), font=self.font, borderwidth=1).grid(row=0, column=0)
+        Button(self.rows[1], width=str(4), height=str(KEYS_HEIGHT), text="5", command=lambda: self.update_display(str(5)), font=self.font, borderwidth=1).grid(row=0, column=1)
+        Button(self.rows[1], width=str(4), height=str(KEYS_HEIGHT), text="6", command=lambda: self.update_display(str(6)), font=self.font, borderwidth=1).grid(row=0, column=2)
+        Button(self.rows[2], width=str(4), height=str(KEYS_HEIGHT), text="1", command=lambda: self.update_display(str(1)), font=self.font, borderwidth=1).grid(row=0, column=0)
+        Button(self.rows[2], width=str(4), height=str(KEYS_HEIGHT), text="2", command=lambda: self.update_display(str(2)), font=self.font, borderwidth=1).grid(row=0, column=1)
+        Button(self.rows[2], width=str(4), height=str(KEYS_HEIGHT), text="3", command=lambda: self.update_display(str(3)), font=self.font, borderwidth=1).grid(row=0, column=2)
+        Button(self.rows[3], width=str(13), height=str(KEYS_HEIGHT), text="0", command=lambda: self.update_display("0"), font=self.font, borderwidth=1).grid(row=0, column=0)
+        Button(self.rows[0], width=str(4), height=str(KEYS_HEIGHT), text="%", command=lambda: self.add_symbol("/"), font=self.font, borderwidth=1).grid(row=0, column=3)
+        Button(self.rows[1], width=str(4), height=str(KEYS_HEIGHT), text="x", command=lambda: self.add_symbol("*"), font=self.font, borderwidth=1).grid(row=0, column=3)
+        Button(self.rows[2], width=str(4), height=str(KEYS_HEIGHT), text="-", command=lambda: self.add_symbol("-"), font=self.font, borderwidth=1).grid(row=0, column=3)
+        Button(self.rows[3], width=str(4), height=str(KEYS_HEIGHT), text="+", command=lambda: self.add_symbol("+"), font=self.font, borderwidth=1).grid(row=0, column=1)
+        Button(self.rows[4], width=str(4), height=str(KEYS_HEIGHT), text="C", command=self.erase_all, font=self.font, borderwidth=1).grid(row=0, column=0)
+        Button(self.rows[4], width=str(4), height=str(KEYS_HEIGHT), text="AC", command=self.erase_last, font=self.font, borderwidth=1).grid(row=0, column=1)
+        Button(self.rows[4], width=str(4), height=str(KEYS_HEIGHT), text=".", command=self.add_dot, font=self.font, borderwidth=1).grid(row=0, column=2)
+        Button(self.rows[4], width=str(4), height=str(KEYS_HEIGHT), text="=", command=self.compute, font=self.font, borderwidth=1).grid(row=0, column=3)
         # ============== START THE APPLICATION ==============
         self.window.mainloop()
 
@@ -48,10 +54,10 @@ class Calculatrice:
         if self.display_label["text"] == "0":
             self.display_label["text"] = text
         else:
-            self.display_label["text"] += text
+            self.display_label["text"] = str(self.display_label["text"]) + text
 
     def compute(self):
-        return
+        self.display_label["text"] = str(eval(self.display_label["text"]))
 
     def erase_all(self):
         self.display_label.config(text="0")
@@ -61,6 +67,13 @@ class Calculatrice:
             self.display_label.config(text=self.display_label['text'][:-1])
         else:
             self.erase_all()
+
+    def add_symbol(self, symbol):
+        if self.display_label["text"][-1].isdigit():
+            self.update_display(symbol)
+
+    def add_dot(self):
+        return
 
 
 if __name__ == "__main__":
