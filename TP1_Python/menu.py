@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# TP1 Python - Thomas ROSSI
+# TP1 Python - Thomas ROSSI & Emeric PAIN
 
 from builtins import str, input, int, open
 from os import path
@@ -15,7 +15,6 @@ def choose_file():
     print("Choisissez un fichier: ")
     global file_name
     file_name = input()
-    print(file_name)
     print()  # print an empty line as a separation
 
 

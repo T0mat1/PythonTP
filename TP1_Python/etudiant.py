@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # TP1 Python - Thomas ROSSI
+import unidecode
 from builtins import str
-
 from TP1_Python.date import Date
 from datetime import date as d
 
@@ -14,7 +14,9 @@ class Etudiant:
         self.date_naissance = Date(date_naissance)
 
     def adresselec(self):
-        return self.prenom+"."+self.nom+"@etu.univ-tours.fr"
+        nom = unidecode.unidecode(self.nom).replace(" ", "").lower()
+        prenom = unidecode.unidecode(self.prenom).replace(" ", "").lower()
+        return prenom+"."+nom+"@etu.univ-tours.fr"
 
     def age(self):
         today = d.today()
