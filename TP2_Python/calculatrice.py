@@ -44,6 +44,12 @@ class Calculatrice:
         # ============== START THE APPLICATION ==============
         self.window.mainloop()
 
+    def update_display(self, text):
+        if self.display_label["text"] == "0":
+            self.display_label["text"] = text
+        else:
+            self.display_label["text"] += text
+
     def compute(self):
         return
 
