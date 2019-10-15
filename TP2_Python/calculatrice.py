@@ -47,7 +47,7 @@ class Calculatrice:
         # ============== Set the display ==============
         self.display = Frame(self.window, bd=1, relief="solid")
         self.display.pack()
-        self.display_label = Label(self.display, text="0", font=self.font, width=str(60), height=str(DISPLAY_HEIGHT), foreground=BLACK, background=WHITE)
+        self.display_label = Label(self.display, text="0", anchor="c", font=self.font, width=str(60), height=str(DISPLAY_HEIGHT), foreground=BLACK, background=WHITE)
         self.display_label.pack()
 
         # ============== Set the keys ==============
