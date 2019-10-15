@@ -4,6 +4,16 @@ from tkinter import *
 from tkinter.font import Font
 
 
+def display_about_popup():
+    window = Toplevel()
+    window.wm_title("À propos")
+    window.geometry("300x50+500+300")
+    window.wm_resizable(False, False)
+    Label(window, text="Calculatrice [Version 1.2]").pack()
+    Label(window, text="Auteurs : Emeric Pain & Thomas Rossi").pack()
+    window.mainloop()
+
+
 class Calculatrice:
 
     def __init__(self):
@@ -21,6 +31,15 @@ class Calculatrice:
         self.window.title("Calculatrice")
         self.window.wm_resizable(False, False)
         self.window.geometry('300x450+500+200')
+
+        # ============== Set the menubar ==============
+        self.menubar = Menu(self.window)
+        self.window.config(menu=self.menubar)
+        self.menu_option = Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label="Options", menu=self.menu_option)
+        self.menu_option.add_command(label="Scientifique")
+        self.menubar.add_command(label="Quitter", command=self.window.quit)
+        self.menubar.add_command(label="?", command=display_about_popup)
 
         # ============== Set the font ==============
         self.font = Font(self.window, ("Arial", 20))
@@ -46,8 +65,8 @@ class Calculatrice:
         Button(self.rows[2], width=str(4), height=str(KEYS_HEIGHT), text="2", command=lambda: self.update_display(str(2)), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=1)
         Button(self.rows[2], width=str(4), height=str(KEYS_HEIGHT), text="3", command=lambda: self.update_display(str(3)), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=2)
         Button(self.rows[3], width=str(13), height=str(KEYS_HEIGHT), text="0", command=lambda: self.update_display("0"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=0)
-        Button(self.rows[0], width=str(4), height=str(KEYS_HEIGHT), text="%", command=lambda: self.add_symbol("/"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=3)
-        Button(self.rows[1], width=str(4), height=str(KEYS_HEIGHT), text="x", command=lambda: self.add_symbol("*"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=3)
+        Button(self.rows[0], width=str(4), height=str(KEYS_HEIGHT), text="÷", command=lambda: self.add_symbol("/"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=3)
+        Button(self.rows[1], width=str(4), height=str(KEYS_HEIGHT), text="×", command=lambda: self.add_symbol("*"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=3)
         Button(self.rows[2], width=str(4), height=str(KEYS_HEIGHT), text="-", command=lambda: self.add_symbol("-"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=3)
         Button(self.rows[3], width=str(4), height=str(KEYS_HEIGHT), text="+", command=lambda: self.add_symbol("+"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=1)
         Button(self.rows[4], width=str(4), height=str(KEYS_HEIGHT), text="C", command=self.erase_all, font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=0)
@@ -57,6 +76,8 @@ class Calculatrice:
 
         # ============== START THE APPLICATION ==============
         self.window.mainloop()
+
+        # ============== Set the "about" window ==============
 
     def update_display(self, text):
         if self.display_label["text"] == "0":
@@ -81,14 +102,16 @@ class Calculatrice:
                 self.display_label.config(text=self.display_label['text'][:-1])
                 if self.display_label["text"] == "":
                     self.display_label["text"] = "0"
-                    break;
+                    break
         else:
             self.erase_all()
 
     def add_symbol(self, symbol):
         if self.display_label["text"][-1].isdigit():
-            self.update_display(symbol)
+            self.display_label["text"] = self.display_label["text"]+symbol
             self.isFloat = False
+        elif self.display_label["text"][-1] != ".":
+            self.display_label["text"] = self.display_label["text"][:-1] + symbol
 
     def add_dot(self):
         if self.display_label["text"] == "0":
