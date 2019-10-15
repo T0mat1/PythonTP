@@ -77,8 +77,11 @@ class Calculatrice:
         if len(self.display_label['text']) > 1:
             if self.display_label["text"][-1] == ".":
                 self.isFloat = False
-            while self.display_label["text"][-1].isdigit():
+            while self.display_label["text"][-1].isdigit() or self.display_label["text"][-1] == ".":
                 self.display_label.config(text=self.display_label['text'][:-1])
+                if self.display_label["text"] == "":
+                    self.display_label["text"] = "0"
+                    break;
         else:
             self.erase_all()
 
