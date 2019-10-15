@@ -77,7 +77,8 @@ class Calculatrice:
         if len(self.display_label['text']) > 1:
             if self.display_label["text"][-1] == ".":
                 self.isFloat = False
-            self.display_label.config(text=self.display_label['text'][:-1])
+            while self.display_label["text"][-1].isdigit():
+                self.display_label.config(text=self.display_label['text'][:-1])
         else:
             self.erase_all()
 
@@ -89,6 +90,7 @@ class Calculatrice:
     def add_dot(self):
         if self.display_label["text"] == "0":
             self.update_display("0.")
+            self.isFloat = True
             return
         if not self.isFloat:
             self.update_display(".")
