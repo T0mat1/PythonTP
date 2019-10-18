@@ -69,7 +69,7 @@ class Calculatrice:
         Button(self.rows[3], width=str(4), height=str(KEYS_HEIGHT), text=")", command=lambda: self.update_display(")"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=1)
         Button(self.rows[3], width=str(4), height=str(KEYS_HEIGHT), text="0", command=lambda: self.update_display("0"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=2)
         Button(self.rows[0], width=str(4), height=str(KEYS_HEIGHT), text="÷", command=lambda: self.add_symbol("/"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=3)
-        Button(self.rows[1], width=str(4), height=str(KEYS_HEIGHT), text="×", command=lambda: self.add_symbol("*"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=3)
+        Button(self.rows[1], width=str(4), height=str(KEYS_HEIGHT), text="x", command=lambda: self.add_symbol("*"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=3)
         Button(self.rows[2], width=str(4), height=str(KEYS_HEIGHT), text="-", command=lambda: self.add_symbol("-"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=3)
         Button(self.rows[3], width=str(4), height=str(KEYS_HEIGHT), text="+", command=lambda: self.add_symbol("+"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=3)
         Button(self.rows[4], width=str(4), height=str(KEYS_HEIGHT), text="C", command=self.erase_all, font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=0)
