@@ -43,4 +43,4 @@ class Date:
         return self.__eq__(other) or self.__gt__(other)
 
     def __str__(self):
-        return str(self.jour) + "/" + str(self.mois) + "/" + str(self.annee)
+        return "%02d/%02d/%d" % (self.jour, self.mois, self.annee)
