@@ -3,7 +3,7 @@ from functools import partial
 from tkinter import *
 from tkinter.font import Font
 
-
+# ============== Set the "about" window ==============
 def display_about_popup():
     window = Toplevel()
     window.wm_title("À propos")
@@ -25,6 +25,7 @@ class Calculatrice:
         BLACK = "#000000"
         # ============== Attributes ==============
         self.isFloat = False
+        self.inErrorState = False
 
         # ============== Set the window ==============
         self.window = Tk()
@@ -64,11 +65,13 @@ class Calculatrice:
         Button(self.rows[2], width=str(4), height=str(KEYS_HEIGHT), text="1", command=lambda: self.update_display(str(1)), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=0)
         Button(self.rows[2], width=str(4), height=str(KEYS_HEIGHT), text="2", command=lambda: self.update_display(str(2)), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=1)
         Button(self.rows[2], width=str(4), height=str(KEYS_HEIGHT), text="3", command=lambda: self.update_display(str(3)), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=2)
-        Button(self.rows[3], width=str(13), height=str(KEYS_HEIGHT), text="0", command=lambda: self.update_display("0"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=0)
+        Button(self.rows[3], width=str(4), height=str(KEYS_HEIGHT), text="(", command=lambda: self.update_display("("), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=0)
+        Button(self.rows[3], width=str(4), height=str(KEYS_HEIGHT), text=")", command=lambda: self.update_display(")"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=1)
+        Button(self.rows[3], width=str(4), height=str(KEYS_HEIGHT), text="0", command=lambda: self.update_display("0"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=2)
         Button(self.rows[0], width=str(4), height=str(KEYS_HEIGHT), text="÷", command=lambda: self.add_symbol("/"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=3)
         Button(self.rows[1], width=str(4), height=str(KEYS_HEIGHT), text="×", command=lambda: self.add_symbol("*"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=3)
         Button(self.rows[2], width=str(4), height=str(KEYS_HEIGHT), text="-", command=lambda: self.add_symbol("-"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=3)
-        Button(self.rows[3], width=str(4), height=str(KEYS_HEIGHT), text="+", command=lambda: self.add_symbol("+"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=1)
+        Button(self.rows[3], width=str(4), height=str(KEYS_HEIGHT), text="+", command=lambda: self.add_symbol("+"), font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=3)
         Button(self.rows[4], width=str(4), height=str(KEYS_HEIGHT), text="C", command=self.erase_all, font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=0)
         Button(self.rows[4], width=str(4), height=str(KEYS_HEIGHT), text="AC", command=self.erase_last, font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=1)
         Button(self.rows[4], width=str(4), height=str(KEYS_HEIGHT), text=".", command=self.add_dot, font=self.font, borderwidth=KEY_BORDERWIDTH).grid(row=0, column=2)
@@ -77,22 +80,33 @@ class Calculatrice:
         # ============== START THE APPLICATION ==============
         self.window.mainloop()
 
-        # ============== Set the "about" window ==============
-
     def update_display(self, text):
-        if self.display_label["text"] == "0":
-            self.display_label["text"] = text
-        else:
-            self.display_label["text"] = str(self.display_label["text"]) + text
+        if not self.inErrorState :
+            if self.display_label["text"] == "0":
+                if text == ")":
+                    self.display_label["text"] = "0"
+                else:
+                    self.display_label["text"] = text
+            else:
+                self.display_label["text"] = str(self.display_label["text"]) + text
 
     def compute(self):
-        res = eval(self.display_label["text"])
-        self.isFloat = "." in str(res)
-        self.display_label["text"] = str(res)
+        if not self.inErrorState:
+            try:
+                res = eval(self.display_label["text"])
+                self.isFloat = "." in str(res)
+                self.display_label["text"] = str(res)
+            except ZeroDivisionError:
+                self.display_label["text"] = "Erreur : division par 0"
+                self.inErrorState = True
+            except SyntaxError:
+                self.display_label["text"] = "Erreur de syntaxe"
+                self.inErrorState = True
 
     def erase_all(self):
         self.isFloat = False
         self.display_label.config(text="0")
+        self.inErrorState = False
 
     def erase_last(self):
         if len(self.display_label['text']) > 1:
