@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# TP1 Python - Thomas ROSSI
+# TP1 Python - Thomas ROSSI & Emeric PAIN
 
 from builtins import type, int
 

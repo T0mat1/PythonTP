@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# TP2 Python - Thomas ROSSI & Emeric PAIN
 from functools import partial
 from tkinter import *
 from tkinter.font import Font

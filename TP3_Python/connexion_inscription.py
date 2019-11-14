@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# TP3 Python - Emeric PAIN & Thomas ROSSI
+
 from tkinter import *
 
 
@@ -14,7 +17,7 @@ def display_popup_inscription():
     Label(window, text="Entrez votre mot de passe").pack()
     passwordToVerify = Entry(window)
     passwordToVerify.pack()
-    Button(window, width=str(10), height=str(2), text="Valider", command=lambda: ConnexionInscription.do_inscription(loginToVerify, passwordToVerify),
+    Button(window, width=str(10), height=str(2), text="Valider", command=lambda: do_inscription(passwordToVerify),
            borderwidth=1).pack()
     window.mainloop()
     try:
@@ -23,15 +26,17 @@ def display_popup_inscription():
         pass
 
 
+def check_connexion(login, password):
+    print(login)
+    print(password)
+
+
+def do_inscription(loginToVerify, passwordToVerify):
+    print(loginToVerify)
+    print(passwordToVerify)
+
+
 class ConnexionInscription:
-
-    def check_connexion(self, login, password):
-        print(login)
-        print(password)
-
-    def do_inscription(self, loginToVerify, passwordToVerify):
-        print(loginToVerify)
-        print(passwordToVerify)
 
     def __init__(self):
         self.window = Tk()
@@ -41,10 +46,11 @@ class ConnexionInscription:
         self.rows = []
         self.rows.append(Frame(self.window, bd=0))
         self.rows[0].pack()
-        Button(self.rows[0], width=str(10), height=str(2), text="Connexion", command=lambda: self.display_popup_connexion(),
+        Button(self.rows[0], width=str(10), height=str(2), text="Connexion",
+               command=lambda: self.display_popup_connexion(),
                borderwidth=1).grid(row=0, column=0)
         Button(self.rows[0], width=str(10), height=str(2), text="Inscription",
-               command=lambda: self.display_popup_inscription(), borderwidth=1).grid(row=0, column=1)
+               command=lambda: display_popup_inscription(), borderwidth=1).grid(row=0, column=1)
         self.window.mainloop()
 
     def display_popup_connexion(self):
@@ -63,7 +69,7 @@ class ConnexionInscription:
         password.pack()
         self.password = password["text"]
         Button(window, width=str(10), height=str(2), text="Valider",
-               command=lambda: self.check_connexion(self.login, self.password),
+               command=lambda: check_connexion(self.login, self.password),
                borderwidth=1).pack()
         window.mainloop()
         try:
