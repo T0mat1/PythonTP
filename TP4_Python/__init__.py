@@ -11,8 +11,8 @@ n = 200
 random_list = [r.randint(a, b) for _ in range(n)]
 
 # 2. Afficher la courbe de ces données dans une fenêtre matplotlib
-# plt.plot(random_list)
-# plt.show()
+plt.plot(random_list)
+plt.show()
 
 # 3. Afficher plusieurs courbes avec styles et couleurs variés
 plt.plot(list(map(lambda x: x, list(range(0,100)))), "r--")
