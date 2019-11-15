@@ -14,7 +14,7 @@ def read_csv_file(filename, enc="utf-8"):
 
 if __name__ == "__main__":
     # main execution for test purpose
-    col, dat = read_csv_file("C:\\Users\\Tomati\\Downloads\\communes.csv", "cp1252")
+    col, dat = read_csv_file("communes.csv", "cp1252")
     print("Colonnes:")
     print(col)
     print("Données:")
