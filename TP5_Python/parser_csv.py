@@ -3,6 +3,7 @@
 
 
 def read_csv_file(filename, enc="utf-8"):
+    #TODO regler probleme poptotale region
     with open(filename, 'r', encoding=enc) as file:
         data = []
         lines = file.readlines()
@@ -14,7 +15,9 @@ def read_csv_file(filename, enc="utf-8"):
 
 if __name__ == "__main__":
     # main execution for test purpose
-    col, dat = read_csv_file("communes.csv", "cp1252")
+    # col, dat = read_csv_file("communes.csv", "cp1252")
+    col, dat = read_csv_file("regions.csv", "cp1252")
+    # col, dat = read_csv_file("departements.csv", "cp1252")
     print("Colonnes:")
     print(col)
     print("Données:")
