@@ -3,13 +3,12 @@
 
 
 def read_csv_file(filename, enc="utf-8"):
-    #TODO regler probleme poptotale region
     with open(filename, 'r', encoding=enc) as file:
         data = []
         lines = file.readlines()
         columns =lines[7].split(";")
         for line in lines[8:-1]:
-            data.append(line.split(";")[:-1])
+            data.append(line.split(";")[:])
         return columns, data
 
 

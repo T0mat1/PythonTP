@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sqlite3
+from collections import defaultdict
 
 
 def create_database(dbPath):
@@ -134,6 +135,31 @@ def calculer_population_region(dbPath, codeRegion):
             population += calculer_population_departement(dbPath, line[0])
 
         return population
+    except Exception as e:
+        connexion.rollback()
+        raise e
+
+def search_commune_with_same_name(dbPath):
+    connexion = sqlite3.connect(dbPath)
+    try:
+        c = connexion.cursor()
+        request = '''SELECT nomCommune, codeDepartement 
+                     FROM Communes 
+                     WHERE nomCommune IN (
+                        SELECT nomCommune 
+                        FROM Communes 
+                        GROUP By nomCommune 
+                        HAVING COUNT(nomCommune) > 1)
+                     ORDER BY nomCommune'''
+        c.execute(request)
+
+        result = c.fetchall()
+        d = defaultdict(list)
+        for key,value in result:
+            d[key].append(value)
+
+        for commune in list(d.items()):
+            print("Nom commune :", commune[0], "; Départements :", commune[1])
     except Exception as e:
         connexion.rollback()
         raise e

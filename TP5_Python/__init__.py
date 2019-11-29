@@ -45,5 +45,6 @@ if __name__ == "__main__":
     # for commune in dataCommunes:
     #     db_management.insert_commune(dbPath, commune[2], commune[5], commune[6], commune[9])
     # calculer_population_departement_et_comparer(dataDepartement, dbPath)
-    calculer_population_region_et_comparer(dataRegions, dbPath)
+    # calculer_population_region_et_comparer(dataRegions, dbPath)
+    db_management.search_commune_with_same_name(dbPath)
 
