@@ -2,8 +2,10 @@
 # TP6 - Emeric Pain & Thomas Rossi
 
 import numpy as np
-from random import randint
-from random import seed
+from scipy import optimize
+from scipy import interpolate
+import matplotlib.pyplot as plt
+from random import randint, seed, random
 
 
 def question1():
@@ -53,8 +55,28 @@ def question3():
         print(vecteur_propre)
 
 
+def question4():
+    print("\n============= QUESTION 4 =============")
+    fonction_carre = lambda x: x*x
+    fonction_affine = lambda x: 20*x+3
+    liste_points_carre = [fonction_carre(x)+(random()-0.5)*5 for x in range(0, 20)]
+    liste_points_affine = [fonction_affine(x)+(random()-0.5)*5 for x in range(0, 20)]
+    plt.plot(liste_points_carre, 'b.', label="x²")
+    plt.plot(liste_points_affine, 'r.', label="20x+3")
+    plt.legend()
+    plt.show()
+    curve_carre = list(optimize.curve_fit(f=fonction_carre, xdata=range(0, 20), ydata=liste_points_carre))
+    curve_affine = list(optimize.curve_fit(f=fonction_affine, xdata=range(0, 20), ydata=liste_points_affine))
+    plt.plot(curve_carre, 'b', label="x²")
+    plt.plot(curve_affine, 'r', label="20x+3")
+    plt.legend()
+    plt.show()
+
+
 if __name__ == "__main__":
     seed(2)
     #question1()
     #question2()
-    question3()
+    #question3()
+    question4()
+
