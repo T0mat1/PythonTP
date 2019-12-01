@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # TP1 Python - Thomas ROSSI
+import unidecode
 from builtins import str
-
 from TP1_Python.date import Date
 from datetime import date as d
 
@@ -14,7 +14,9 @@ class Etudiant:
         self.date_naissance = Date(date_naissance)
 
     def adresselec(self):
-        return self.prenom+"."+self.nom+"@etu.univ-tours.fr"
+        nom = unidecode.unidecode(self.nom).replace(" ", "").lower()
+        prenom = unidecode.unidecode(self.prenom).replace(" ", "").lower()
+        return prenom+"."+nom+"@etu.univ-tours.fr"
 
     def age(self):
         today = d.today()
@@ -24,7 +26,7 @@ class Etudiant:
         return age
 
     def __str__(self):
-        return self.prenom+" "+self.nom
+        return self.prenom + " " + self.nom + " (" + str(self.date_naissance) + ")"
 
     def __repr__(self):
         return self.__str__()
@@ -32,7 +34,10 @@ class Etudiant:
 
 if __name__ == "__main__":
     students = []
+    # Read the file instantiate the objects and store them in a list
     for line in open(".\\fichetu.csv","r").readlines():
         data = line.split(";")
         students.append(Etudiant(data[0], data[1], data[2]))
-    print(str(students))
+    # Print each student
+    for student in students:
+        print(str(student))

@@ -41,3 +41,6 @@ class Date:
 
     def __ge__(self, other):
         return self.__eq__(other) or self.__gt__(other)
+
+    def __str__(self):
+        return "%02d/%02d/%d" % (self.jour, self.mois, self.annee)
