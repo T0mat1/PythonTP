@@ -36,8 +36,8 @@ if __name__ == "__main__":
     dbPath = "TP5_DB.SQLite"
     db_management.create_database(dbPath)
     _, dataRegions = parser_csv.read_csv_file("regions.csv", "cp1252")
-    # for region in dataRegions:
-    #     db_management.insert_region(dbPath, region[0], region[1])
+    for region in dataRegions:
+        db_management.insert_region(dbPath, region[0], region[1])
     _, dataDepartement = parser_csv.read_csv_file("departements.csv", "cp1252")
     # for departement in dataDepartement:
     #     db_management.insert_departement(dbPath, departement[2], departement[3], departement[0])
@@ -47,4 +47,5 @@ if __name__ == "__main__":
     # calculer_population_departement_et_comparer(dataDepartement, dbPath)
     # calculer_population_region_et_comparer(dataRegions, dbPath)
     db_management.search_commune_with_same_name(dbPath)
+    # print(db_management.get_all_regions(dbPath))
 

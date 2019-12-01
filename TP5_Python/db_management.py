@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import sqlite3
 from collections import defaultdict
+import xml.etree.cElementTree as ET
+from lxml import etree
 
 
 def create_database(dbPath):
@@ -139,6 +141,7 @@ def calculer_population_region(dbPath, codeRegion):
         connexion.rollback()
         raise e
 
+
 def search_commune_with_same_name(dbPath):
     connexion = sqlite3.connect(dbPath)
     try:
@@ -155,7 +158,7 @@ def search_commune_with_same_name(dbPath):
 
         result = c.fetchall()
         d = defaultdict(list)
-        for key,value in result:
+        for key, value in result:
             d[key].append(value)
 
         for commune in list(d.items()):
@@ -164,7 +167,80 @@ def search_commune_with_same_name(dbPath):
         connexion.rollback()
         raise e
 
+
+def get_all_regions(dbPath):
+    connexion = sqlite3.connect(dbPath)
+    try:
+        c = connexion.cursor()
+        request = "Select * from Regions"
+        c.execute(request)
+        result = c.fetchall()
+
+        connexion.commit()
+        connexion.close()
+        return result
+    except Exception as e:
+        connexion.rollback()
+        raise e
+
+
+def get_all_departement(dbPath):
+    connexion = sqlite3.connect(dbPath)
+    try:
+        c = connexion.cursor()
+        request = "Select * from Departements"
+        c.execute(request)
+        result = c.fetchall()
+
+        connexion.commit()
+        connexion.close()
+        return result
+    except Exception as e:
+        connexion.rollback()
+        raise e
+
+def get_all_communes(dbPath):
+    connexion = sqlite3.connect(dbPath)
+    try:
+        c = connexion.cursor()
+        request = "Select * from Communes"
+        c.execute(request)
+        result = c.fetchall()
+
+        connexion.commit()
+        connexion.close()
+        return result
+    except Exception as e:
+        connexion.rollback()
+        raise e
+
+def create_xml_file(dbPath, xmlFile):
+    root = etree.Element("Database")
+    regions = etree.SubElement(root, "Regions")
+    for region in get_all_regions(dbPath):
+        etree.SubElement(regions, 'Region',
+                         codeRegion=region[0],
+                         nomRegion=region[1])
+    departements = etree.SubElement(root, "Departements")
+    for departement in get_all_departement(dbPath):
+        etree.SubElement(departements, 'Departement',
+                         codeDepartement=departement[0],
+                         nomDepartement=departement[1],
+                         codeRegion=departement[2])
+    communes = etree.SubElement(root, "Communes")
+    for commune in get_all_communes(dbPath):
+        etree.SubElement(communes, 'Commune',
+                         codeDepartement=commune[0],
+                         codeCommune=commune[1],
+                         nomCommune=commune[2],
+                         populationTotale=commune[3])
+    doc = etree.ElementTree(root)
+    doc.write(xmlFile, encoding='utf-8', xml_declaration=True, pretty_print=True)
+
+
+
 if __name__ == "__main__":
     # create_table('TP5_DB_tayst.db', "taystCommmune", ["codeRegion", "codeDepartement", "nomVille", "nomAzerty", "population"])
     # populate_table('TP5_DB_tayst.db', "taystCommmune", ["14", "86", "'Poitiers'", "'PoitPoit'", "8000000000"])
-    calculer_population_departement("TP5_DB.SQLite", "86")
+    # calculer_population_departement("TP5_DB.SQLite", "86")
+    create_xml_file("TP5_DB.SQLite", "testXml.xml")
