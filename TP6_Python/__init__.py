@@ -57,26 +57,26 @@ def question3():
 
 def question4():
     print("\n============= QUESTION 4 =============")
-    fonction_carre = lambda x: x*x
-    fonction_affine = lambda x: 20*x+3
-    liste_points_carre = [fonction_carre(x)+(random()-0.5)*5 for x in range(0, 20)]
-    liste_points_affine = [fonction_affine(x)+(random()-0.5)*5 for x in range(0, 20)]
-    plt.plot(liste_points_carre, 'b.', label="x²")
-    plt.plot(liste_points_affine, 'r.', label="20x+3")
-    plt.legend()
-    plt.show()
-    curve_carre = list(optimize.curve_fit(f=fonction_carre, xdata=range(0, 20), ydata=liste_points_carre))
-    curve_affine = list(optimize.curve_fit(f=fonction_affine, xdata=range(0, 20), ydata=liste_points_affine))
-    plt.plot(curve_carre, 'b', label="x²")
-    plt.plot(curve_affine, 'r', label="20x+3")
+    func = lambda x, a, b, c, d: a*x**3+b*x**2+c*x+d
+    xdata = np.linspace(-50, 50, 50)
+    y = func(xdata, 1, 3.2, 2.6, 11.8)
+    noise = 21**3 * np.random.normal(size=xdata.size)
+    ydata = y + noise
+    opt, cov = optimize.curve_fit(func, xdata, ydata)
+    plt.plot(xdata, ydata, 'b+', label="données")
+    plt.plot(xdata, y, 'g-', label='real: x³+3.2x²+2.6x+11.8')
+    plt.plot(xdata, func(xdata, *opt), 'r-', label='fit: %5.3fx³+(%5.3f)x²+(%5.3f)x+(%5.3f)' % tuple(opt))
+    plt.xlabel('x')
+    plt.ylabel('y')
     plt.legend()
     plt.show()
 
 
 if __name__ == "__main__":
     seed(2)
-    #question1()
-    #question2()
-    #question3()
+    np.random.seed(3)
+    question1()
+    question2()
+    question3()
     question4()
 
