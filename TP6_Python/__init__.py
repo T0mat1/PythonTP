@@ -3,8 +3,8 @@
 
 import numpy as np
 from scipy import optimize
-from scipy import interpolate
 import matplotlib.pyplot as plt
+from PIL import Image
 from random import randint, seed, random
 
 
@@ -72,11 +72,24 @@ def question4():
     plt.show()
 
 
+def question5():
+    print("\n============= QUESTION 5 =============")
+    im = Image.open("img\\logo.png")
+    print(im.format, im.size, im.mode)
+    im.show()
+    im = im.resize((128, 128))
+    im.format = "PNG" # Le Image.resize "casse" le format
+    print(im.format, im.size, im.mode)
+    im.show()
+
+
 if __name__ == "__main__":
     seed(2)
     np.random.seed(3)
-    question1()
-    question2()
-    question3()
-    question4()
+    #question1()
+    #question2()
+    #question3()
+    #question4()
+    question5()
+
 
