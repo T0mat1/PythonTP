@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import sqlite3
 from collections import defaultdict
-import xml.etree.cElementTree as ET
 from lxml import etree
 
 
@@ -199,6 +198,7 @@ def get_all_departement(dbPath):
         connexion.rollback()
         raise e
 
+
 def get_all_communes(dbPath):
     connexion = sqlite3.connect(dbPath)
     try:
@@ -213,6 +213,7 @@ def get_all_communes(dbPath):
     except Exception as e:
         connexion.rollback()
         raise e
+
 
 def create_xml_file(dbPath, xmlFile):
     root = etree.Element("Database")
@@ -238,9 +239,20 @@ def create_xml_file(dbPath, xmlFile):
     doc.write(xmlFile, encoding='utf-8', xml_declaration=True, pretty_print=True)
 
 
-
+def populate_db_with_xml(dbPath, xmlFile):
+    create_database(dbPath)
+    tree = etree.parse(xmlFile)
+    for value in tree.xpath("/Database/Regions/Region"):
+        insert_region(dbPath, value.attrib['codeRegion'], value.attrib['nomRegion'])
+    for value in tree.xpath("/Database/Departements/Department"):
+        insert_departement(dbPath, value.attrib['codeDepartement'], value.attrib['nomDepartement'],
+                           value.attrib['codeRegion'])
+    for value in tree.xpath("/Database/Communes/Commune"):
+        insert_commune(dbPath, value.attrib['codeDepartement'], value.attrib['codeCommune'],
+                       value.attrib['nomCommune'], value.attrib['populationTotale'])
 if __name__ == "__main__":
     # create_table('TP5_DB_tayst.db', "taystCommmune", ["codeRegion", "codeDepartement", "nomVille", "nomAzerty", "population"])
     # populate_table('TP5_DB_tayst.db', "taystCommmune", ["14", "86", "'Poitiers'", "'PoitPoit'", "8000000000"])
     # calculer_population_departement("TP5_DB.SQLite", "86")
-    create_xml_file("TP5_DB.SQLite", "testXml.xml")
+    # create_xml_file("TP5_DB.SQLite", "testXml.xml")
+    populate_db_with_xml("TP5_XML.SQLite", "testXml.xml")
