@@ -27,6 +27,7 @@ def create_database(dbPath):
         raise e
 
 
+# Méthode générique pour créer une table, non utilisée dans notre cas
 def create_table(dbPath, tableName, columns):
     connexion = sqlite3.connect(dbPath)
     try:
@@ -250,9 +251,31 @@ def populate_db_with_xml(dbPath, xmlFile):
     for value in tree.xpath("/Database/Communes/Commune"):
         insert_commune(dbPath, value.attrib['codeDepartement'], value.attrib['codeCommune'],
                        value.attrib['nomCommune'], value.attrib['populationTotale'])
+
+
+# On ne doit utiliser la méthode qu'une seule fois
+def update_database_2016(dbPath):
+    connexion = sqlite3.connect(dbPath)
+    try:
+        c = connexion.cursor()
+        request = "ALTER TABLE Departements ADD codeNouvelleRegion "
+        c.execute(request)
+        request = '''CREATE TABLE IF NOT EXISTS NouvellesRegions
+                        (codeNouvelleRegion, nomNouvelleRegion)'''
+        c.execute(request)
+        connexion.commit()
+    except Exception as e:
+        connexion.rollback()
+        raise e
+
+def insert_nouvelle_region(dbPath, codeNouvelleRegion, nomNouvelleRegion):
+    populate_table(dbPath, "NouvellesRegions", [codeNouvelleRegion, nomNouvelleRegion])
+
+
 if __name__ == "__main__":
     # create_table('TP5_DB_tayst.db', "taystCommmune", ["codeRegion", "codeDepartement", "nomVille", "nomAzerty", "population"])
     # populate_table('TP5_DB_tayst.db', "taystCommmune", ["14", "86", "'Poitiers'", "'PoitPoit'", "8000000000"])
     # calculer_population_departement("TP5_DB.SQLite", "86")
     # create_xml_file("TP5_DB.SQLite", "testXml.xml")
-    populate_db_with_xml("TP5_XML.SQLite", "testXml.xml")
+    # populate_db_with_xml("TP5_XML.SQLite", "testXml.xml")
+    update_database_2016("TP5_DB_2016.SQLite")

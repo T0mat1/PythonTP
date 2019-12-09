@@ -34,6 +34,7 @@ def calculer_population_region_et_comparer(dataRegion, dbPath):
 
 if __name__ == "__main__":
     dbPath = "TP5_DB.SQLite"
+    dbPath2016 = "TP5_DB_2016.SQLite"
     db_management.create_database(dbPath)
     _, dataRegions = parser_csv.read_csv_file("regions.csv", "cp1252")
     for region in dataRegions:
@@ -48,4 +49,8 @@ if __name__ == "__main__":
     # calculer_population_region_et_comparer(dataRegions, dbPath)
     db_management.search_commune_with_same_name(dbPath)
     # print(db_management.get_all_regions(dbPath))
+    _, dataNouvellesRegions = parser_csv.read_csv_file("zones-2016.csv", "cp1252")
+    for data in dataNouvellesRegions:
+        if data[0] == "REG":
+            db_management.insert_nouvelle_region(dbPath2016, data[1], data[2])
 
