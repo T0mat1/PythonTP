@@ -142,6 +142,30 @@ def calculer_population_region(dbPath, codeRegion):
         raise e
 
 
+def calculer_population_nouvelle_region(dbPath, codeNouvelleRegion):
+    connexion = sqlite3.connect(dbPath)
+    try:
+        population = 0
+        c = connexion.cursor()
+        request = "SELECT codeDepartement FROM Departements WHERE codeNouvelleRegion =  ?"
+        c.execute(request, (codeNouvelleRegion,))
+
+        result = c.fetchall()
+        for line in result:
+            population += calculer_population_departement(dbPath, line[0])
+
+        return population
+    except Exception as e:
+        connexion.rollback()
+        raise e
+
+
+def calculer_population_all_nouvelle_regions(dbPath):
+    for nouvelleRegion in get_all_nouvelles_regions(dbPath):
+        population = calculer_population_nouvelle_region(dbPath, nouvelleRegion[0])
+        print("Population région " + str(nouvelleRegion[1]) + " : " + str(population))
+
+
 def search_commune_with_same_name(dbPath):
     connexion = sqlite3.connect(dbPath)
     try:
@@ -184,6 +208,22 @@ def get_all_regions(dbPath):
         raise e
 
 
+def get_all_nouvelles_regions(dbPath):
+    connexion = sqlite3.connect(dbPath)
+    try:
+        c = connexion.cursor()
+        request = "Select * from NouvellesRegions"
+        c.execute(request)
+        result = c.fetchall()
+
+        connexion.commit()
+        connexion.close()
+        return result
+    except Exception as e:
+        connexion.rollback()
+        raise e
+
+
 def get_all_departement(dbPath):
     connexion = sqlite3.connect(dbPath)
     try:
@@ -206,6 +246,22 @@ def get_all_communes(dbPath):
         c = connexion.cursor()
         request = "Select * from Communes"
         c.execute(request)
+        result = c.fetchall()
+
+        connexion.commit()
+        connexion.close()
+        return result
+    except Exception as e:
+        connexion.rollback()
+        raise e
+
+
+def get_code_nouvelle_region_by_departement(dbPath,codeDepartement):
+    connexion = sqlite3.connect(dbPath)
+    try:
+        c = connexion.cursor()
+        request = "Select codeNouvelleRegion from Departements where codeDepartement = ?"
+        c.execute(request, (codeDepartement,))
         result = c.fetchall()
 
         connexion.commit()
@@ -268,6 +324,17 @@ def update_database_2016(dbPath):
         connexion.rollback()
         raise e
 
+def add_nouvelles_regions_code_to_departements_table(dbPath, codeDepartement, codeNouvelleRegion):
+    connexion = sqlite3.connect(dbPath)
+    try:
+        c = connexion.cursor()
+        request = "UPDATE Departements SET codeNouvelleRegion = ? WHERE codeDepartement = ?"
+        c.execute(request, (codeNouvelleRegion, codeDepartement,))
+        connexion.commit()
+    except Exception as e:
+        connexion.rollback()
+        raise e
+
 def insert_nouvelle_region(dbPath, codeNouvelleRegion, nomNouvelleRegion):
     populate_table(dbPath, "NouvellesRegions", [codeNouvelleRegion, nomNouvelleRegion])
 
@@ -278,4 +345,5 @@ if __name__ == "__main__":
     # calculer_population_departement("TP5_DB.SQLite", "86")
     # create_xml_file("TP5_DB.SQLite", "testXml.xml")
     # populate_db_with_xml("TP5_XML.SQLite", "testXml.xml")
-    update_database_2016("TP5_DB_2016.SQLite")
+    # update_database_2016("TP5_DB_2016.SQLite")
+    print(get_code_nouvelle_region_by_departement("TP5_DB_2016.SQLite", "44"))
