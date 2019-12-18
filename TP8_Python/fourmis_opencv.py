@@ -10,12 +10,18 @@ import random as rand
 # opencv color format is BGR
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+GREY = (127, 127, 127)
 RED = (0, 0, 255)
 GREEN = (0, 255, 0)
 BLUE = (255, 0, 0)
 YELLOW = (0, 255, 255)
+BROWN = (19, 69, 139)
+PINK = (147, 20, 255)
+PURPLE = (130, 0, 75)
+ORANGE = (0, 69, 255)
+CYAN = (255, 255, 0)
 
-COLORS = [WHITE, BLACK, RED, GREEN, BLUE, YELLOW]
+COLORS = [WHITE, BLACK, RED, GREEN, BLUE, YELLOW, BROWN, PINK, PURPLE, ORANGE, GREY, CYAN]
 
 # Ants configurations
 CONFIG_1 = 1
@@ -48,7 +54,8 @@ class AppFourmis:
 
     def start(self):
         for i in range(self.nb_fourmis):
-            self.fourmis.append(Fourmi(image=self.image, color=COLORS[1+i], x=i*100, y=300))
+            x, y = rand.randint(0, self.width-1), rand.randint(0, self.height-1)
+            self.fourmis.append(Fourmi(image=self.image, color=COLORS[1+i], x=x, y=y, facing=rand.randint(0, 7)))
             self.fourmis[i].start()
         self.running = True
         self.update()
@@ -63,18 +70,20 @@ class AppFourmis:
 
 class Fourmi(Thread):
 
-    def __init__(self, image, color, fcolor=WHITE, luminance_diff=40, config=CONFIG_1, proba=(1 / 3, 1 / 3, 1 / 3), proba_color=0, x=0, y=0, facing=2):
+    def __init__(self, image, color, fcolor=WHITE, lum_threshold=40, config=CONFIG_1, proba=(1 / 3, 1 / 3, 1 / 3), proba_color=0, x=0, y=0, num_iteration=100000, facing=2):
+        assert int(proba[0]+proba[1]+proba[2]) == 1, "Le vecteur de probabilités doit être stochastique"
         super().__init__()
         self.image = image
         self.x = x
         self.y = y
         self.color = color
         self.followed_color = fcolor
-        self.lum_diff = luminance_diff
+        self.lum_threshold = lum_threshold
         self.config = config
         self.proba = proba
         self.proba_color = proba_color
         self.facing_direction = facing
+        self.num_iteration = num_iteration
         self.is_running = True
         self.set_color()
 
@@ -104,19 +113,17 @@ class Fourmi(Thread):
                          (self.y + DIRECTIONS[self.facing_direction][1]) % (self.image.shape[1] - 1)
 
     def move(self):
-        r = rand.randint(0, 2)
-        if r == 0:
+        r = rand.random()
+        if r <= self.proba[0]:
             self.turn_left()
-        if r == 1:
+        elif r <= self.proba[0]+self.proba[1]:
             self.move_forward()
-        if r == 2:
+        else:
             self.turn_right()
-        if self.x >= 600 or self.y >= 600:
-            print((self.x, self.y))
         self.set_color()
 
     def run(self):
-        for _ in range(100000):
+        for _ in range(self.num_iteration):
             self.move()
             time.sleep(0.005)
             if not self.is_running:
@@ -124,5 +131,5 @@ class Fourmi(Thread):
 
 
 if __name__ == "__main__":
-    app = AppFourmis(5)
+    app = AppFourmis(11)
     app.start()
