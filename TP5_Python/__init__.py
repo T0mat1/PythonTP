@@ -36,17 +36,17 @@ if __name__ == "__main__":
     dbPath = "TP5_DB.SQLite"
     dbPath2016 = "TP5_DB_2016.SQLite"
     # db_management.create_database(dbPath)
-    # _, dataRegions = parser_csv.read_csv_file("regions.csv", "cp1252")
+    _, dataRegions = parser_csv.read_csv_file("regions.csv", "cp1252")
     # for region in dataRegions:
     #     db_management.insert_region(dbPath, region[0], region[1])
-    # _, dataDepartement = parser_csv.read_csv_file("departements.csv", "cp1252")
+    _, dataDepartement = parser_csv.read_csv_file("departements.csv", "cp1252")
     # for departement in dataDepartement:
     #     db_management.insert_departement(dbPath, departement[2], departement[3], departement[0])
     # _, dataCommunes = parser_csv.read_csv_file("communes.csv", "cp1252")
     # for commune in dataCommunes:
     #     db_management.insert_commune(dbPath, commune[2], commune[5], commune[6], commune[9])
-    # calculer_population_departement_et_comparer(dataDepartement, dbPath)
-    # calculer_population_region_et_comparer(dataRegions, dbPath)
+    calculer_population_departement_et_comparer(dataDepartement, dbPath)
+    calculer_population_region_et_comparer(dataRegions, dbPath)
     # db_management.search_commune_with_same_name(dbPath)
     # print(db_management.get_all_regions(dbPath))
     # _, dataNouvellesRegions = parser_csv.read_csv_file("zones-2016.csv", "cp1252")
