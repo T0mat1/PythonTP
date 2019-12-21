@@ -4,9 +4,8 @@
 import numpy as np
 from scipy import optimize
 import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
 from PIL import Image
-from random import randint, seed, random
+from random import randint, seed
 
 
 def question1():
@@ -89,10 +88,10 @@ def question5():
 if __name__ == "__main__":
     seed(2)
     np.random.seed(3)
-    #question1()
-    #question2()
-    #question3()
-    #question4()
+    question1()
+    question2()
+    question3()
+    question4()
     question5()
 
 
