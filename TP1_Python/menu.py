@@ -78,4 +78,8 @@ if __name__ == "__main__":
         print_menu()
         user_input = input()
         choice = int(user_input)
-        FUNCTION_DICT[choice][FUNCTION]()
+        try:
+            FUNCTION_DICT[choice][FUNCTION]()
+        except Exception as e:
+            print('Choix incorrect')
+
