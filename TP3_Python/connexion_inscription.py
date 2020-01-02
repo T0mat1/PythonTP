@@ -93,6 +93,7 @@ class ConnexionInscription:
 
     @staticmethod
     def check_connexion(login, password):
+        assert (login != "" and password != ""), "Login ou mot de passe vide"
         user_pwd_found = False
         salage_password = password + login + password[:2]
         with open("loginPassword.txt", "r") as f:
