@@ -77,8 +77,8 @@ if __name__ == "__main__":
     while choice is not 9:
         print_menu()
         user_input = input()
-        choice = int(user_input)
         try:
+            choice = int(user_input)
             FUNCTION_DICT[choice][FUNCTION]()
         except Exception as e:
             print('Choix incorrect')
