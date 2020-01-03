@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# TP2 Python - Thomas ROSSI & Emeric PAIN
 from functools import partial
 from tkinter import *
 from tkinter.font import Font
@@ -81,18 +82,27 @@ class Calculatrice:
         self.window.mainloop()
 
     def update_display(self, text):
-        if self.display_label["text"] == "0":
-            if text == ")":
-                self.display_label["text"] = "0"
+        if not self.inErrorState :
+            if self.display_label["text"] == "0":
+                if text == ")":
+                    self.display_label["text"] = "0"
+                else:
+                    self.display_label["text"] = text
             else:
-                self.display_label["text"] = text
-        else:
                 self.display_label["text"] = str(self.display_label["text"]) + text
 
     def compute(self):
-        res = eval(self.display_label["text"])
-        self.isFloat = "." in str(res)
-        self.display_label["text"] = str(res)
+        if not self.inErrorState:
+            try:
+                res = eval(self.display_label["text"])
+                self.isFloat = "." in str(res)
+                self.display_label["text"] = str(res)
+            except ZeroDivisionError:
+                self.display_label["text"] = "Erreur : division par 0"
+                self.inErrorState = True
+            except SyntaxError:
+                self.display_label["text"] = "Erreur de syntaxe"
+                self.inErrorState = True
 
     def erase_all(self):
         self.isFloat = False
