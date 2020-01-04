@@ -45,13 +45,15 @@ class CustomServerHandler(http.server.BaseHTTPRequestHandler):
                 'get_vars': str(getvars)
             }
 
-            f = open("index.py", 'rb')
-            while True:
-                file_data = f.read(32768)
-                if file_data is None or len(file_data) == 0:
-                    break
-                self.wfile.write(file_data)
-            f.close()
+            base_path = urlparse(self.path).path
+            if base_path == '/path1':
+                # Do some work
+                pass
+            elif base_path == '/path2':
+                # Do some work
+                pass
+
+            self.wfile.write(bytes(json.dumps(response), 'utf-8'))
         else:
             self.do_AUTHHEAD()
 
@@ -61,7 +63,6 @@ class CustomServerHandler(http.server.BaseHTTPRequestHandler):
             }
 
             self.wfile.write(bytes(json.dumps(response), 'utf-8'))
-
 
     def do_POST(self):
         key = self.server.get_auth_key()
@@ -99,8 +100,7 @@ class CustomServerHandler(http.server.BaseHTTPRequestHandler):
                 # Do some work
                 pass
 
-            # self.wfile.write(bytes(json.dumps(response), 'utf-8'))
-            self.wfile.write("index.py")
+            self.wfile.write(bytes(json.dumps(response), 'utf-8'))
         else:
             self.do_AUTHHEAD()
 
